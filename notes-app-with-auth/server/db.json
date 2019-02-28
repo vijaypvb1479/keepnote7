@@ -1,0 +1,60 @@
+{
+  "notes": [
+    {
+      "noteTitle": "note-1",
+      "noteDescription": "note-1 description",
+      "id": 1,
+      "color": {
+        "r": 66,
+        "g": 206,
+        "b": 28,
+        "a": 1
+      }
+    },
+    {
+      "noteTitle": "note-2",
+      "noteDescription": "note-2 description",
+      "id": 2,
+      "color": {
+        "r": 218,
+        "g": 204,
+        "b": 12,
+        "a": 1
+      }
+    },
+    {
+      "noteTitle": "note-3",
+      "noteDescription": "note-3 description",
+      "id": 3,
+      "color": {
+        "r": "49",
+        "g": "71",
+        "b": "255",
+        "a": "1"
+      }
+    },
+    {
+      "noteTitle": "note-4",
+      "noteDescription": "note-4 description",
+      "id": 4,
+      "color": {
+        "r": "0",
+        "g": "255",
+        "b": "255",
+        "a": "1"
+      }
+    },
+    {
+      "noteTitle": "note-5",
+      "noteDescription": "note-5 description",
+      "id": 5,
+      "color": {
+        "r": "0",
+        "g": "255",
+        "b": "255",
+        "a": "1"
+      },
+      "background": "black"
+    }
+  ]
+}

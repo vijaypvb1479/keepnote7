@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test welcome page 1`] = `
+<WelcomePage
+  classes={
+    Object {
+      "img": "WelcomePage-img-1",
+    }
+  }
+/>
+`;

@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test Search Bar 1`] = `
+<SearchBar
+  classes={
+    Object {
+      "inputInput": "SearchBar-inputInput-4",
+      "inputRoot": "SearchBar-inputRoot-3",
+      "search": "SearchBar-search-1",
+      "searchIcon": "SearchBar-searchIcon-2",
+    }
+  }
+/>
+`;
