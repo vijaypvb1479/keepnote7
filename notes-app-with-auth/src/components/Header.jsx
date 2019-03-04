@@ -7,7 +7,6 @@ import { withStyles } from '@material-ui/core/styles';
 
 import SearchBar from './SearchBar';
 import { Button } from '@material-ui/core';
-import ResponsiveDrawer from './ResponsiveDrawer';
 import { firebase, googleProvider } from '../firebase/firebase';
 
 const styles = theme => ({

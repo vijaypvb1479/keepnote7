@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
-//import Header from './Header';
+import RemindersContainer from './RemindersContainer';
 import NoteTaker from './NoteTaker';
 import NotesContainer from './NotesContainer';
+import ReminderTaker from './ReminderTaker';
+
 import { blue, pink } from '@material-ui/core/colors';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 
@@ -18,7 +20,7 @@ const theme = createMuiTheme({
 
 class NotesApp extends Component {
     render() {
-        const { notes, handleAddNote, handleRemoveNote,currentPage } = this.props; 
+        const { notes, handleAddNote, handleRemoveNote,currentPage,reminders,handleAddReminder,handleRemoveReminder } = this.props; 
         if (currentPage ==='notes'){
             return (
                 <MuiThemeProvider theme={theme}>
@@ -43,10 +45,10 @@ class NotesApp extends Component {
                         <Header />
                     </Grid> */}
                     <Grid item xs={12}>
-                        <NoteTaker handleAddNote={handleAddNote} />
+                        <ReminderTaker handleAddReminder={handleAddReminder} />
                     </Grid>
                     <Grid item xs={12}>
-                        <NotesContainer notes={notes} handleRemoveNote={handleRemoveNote} />
+                        <RemindersContainer reminders={reminders} handleRemoveReminder={handleRemoveReminder} />
                     </Grid>
                 </Grid>
             </MuiThemeProvider>

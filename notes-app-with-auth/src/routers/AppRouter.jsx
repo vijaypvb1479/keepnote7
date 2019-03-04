@@ -33,8 +33,9 @@ class AppRouter extends Component {
         this.state = {
             originalNotes: [],
             notes: [],
-            remainders : [],
+            reminders : [],
             currentPage: 'notes',
+            
         };
         this.handleAddNote = this.handleAddNote.bind(this);
         this.handleRemoveNote = this.handleRemoveNote.bind(this);
@@ -43,6 +44,8 @@ class AppRouter extends Component {
         this.handleCurrentPage = this.handleCurrentPage.bind(this);
         this.handleReloadData = this.handleReloadData.bind(this);
 
+        this.handleAddReminder = this.handleAddReminder.bind(this);
+        this.handleRemoveReminder = this.handleRemoveReminder.bind(this);
     }
 
     componentDidMount() {
@@ -54,6 +57,12 @@ class AppRouter extends Component {
                 notes: success,
                 originalNotes: success,
             }))
+        // Get all the notes
+        fetch(`http://localhost:8083/reminderservice/api/v1/reminder/${userid}`)
+        .then(response => response.json())
+        .then(success => this.setState({
+            reminders: success,
+        }))               
     }
 
     handleReloadData() {
@@ -64,13 +73,49 @@ class AppRouter extends Component {
             .then(success => this.setState({
                 notes: success,
                 originalNotes: success,
-            }))
+            }));
+        // Get all the notes
+        fetch(`http://localhost:8083/reminderservice/api/v1/reminder/${userid}`)
+        .then(response => response.json())
+        .then(success => this.setState({
+            reminders: success,
+        }))            
+
     }
     handleCurrentPage(currentPage){
         this.setState((currState) => ({
             currentPage: currentPage,
         }));
 
+    }
+
+    handleAddReminder(reminder) {
+        fetch('http://localhost:8083/reminderservice/api/v1/reminder', {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(reminder)
+        }).then(response => response.json())
+          .then(reminder => {
+            this.setState((currState) => ({
+                reminders: currState.reminders.concat([reminder]),
+            }));
+                
+            });
+    }
+
+    handleRemoveReminder(reminderId) {
+        let userid = localStorage.getItem('LoggedInUser');
+        fetch(`http://localhost:8083/reminderservice/api/v1/reminder/${userid}/${reminderId}`, {
+            method: 'DELETE',
+            headers: { "Content-Type": "application/json" }
+        })
+          //  .then(response => response.json())
+            .then(response => {
+                const reminderIndexToRemove = this.state.reminders.findIndex(reminder => reminder.reminderId === reminderId);
+                this.setState((currState) => ({
+                    reminders: [...currState.reminders.slice(0, reminderIndexToRemove), ...currState.reminders.slice(reminderIndexToRemove + 1)]
+                }));
+            });
     }
 
     handleAddNote(note) {
@@ -89,6 +134,8 @@ class AppRouter extends Component {
             });
         // Post a new note
     }
+
+
     handleRemoveNote(noteId) {
         let userid = localStorage.getItem('LoggedInUser');
         fetch(`http://localhost:8082/noteservice/api/v1/note/${userid}/${noteId}`, {
@@ -157,6 +204,9 @@ class AppRouter extends Component {
                                 handleAddNote={this.handleAddNote}
                                 handleRemoveNote={this.handleRemoveNote}
                                 currentPage={this.state.currentPage}
+                                reminders={this.state.reminders}
+                                handleAddReminder = {this.handleAddReminder}
+                                handleRemoveReminder = {this.handleRemoveReminder}
                             />
                             {/* <Route
                                 path="/home"

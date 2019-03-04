@@ -3,7 +3,6 @@ import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
-import ResponsiveDrawer from './ResponsiveDrawer';
 const styles = theme => ({
     search: {
         position: 'relative',
