@@ -67,7 +67,6 @@ public class NoteController {
 	 */
 	@ApiOperation(value = "Create Note")
 	@PostMapping("/api/v1/note")
-
 	public ResponseEntity<?> createNote(@RequestBody Note note, HttpServletRequest request) {
 		log.info("createNote : STARTED");
 		HttpHeaders headers = new HttpHeaders();

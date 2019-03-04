@@ -120,4 +120,11 @@ public class ReminderServiceImpl implements ReminderService {
 		return reminderRepository.findAll();
 	}
 
+	@Override
+	public List<Reminder> getRemindersByUser(String userId) {
+		List<Reminder> findByReminderCreatedBy = reminderRepository.findByReminderCreatedBy(userId);
+		
+		return findByReminderCreatedBy;
+	}
+
 }

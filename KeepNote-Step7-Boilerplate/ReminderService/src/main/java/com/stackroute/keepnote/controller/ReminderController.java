@@ -10,12 +10,14 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.stackroute.keepnote.exception.ReminderNotCreatedException;
@@ -36,6 +38,8 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @Api
+@CrossOrigin
+@RequestMapping("/reminderservice")
 public class ReminderController {
 
 	/*
@@ -82,13 +86,13 @@ public class ReminderController {
 	public ResponseEntity<?> createReminder(@RequestBody Reminder reminder,HttpServletRequest request) {
 		log.info("createReminder : STARTED");
 		HttpHeaders headers = new HttpHeaders();
-		String loggedInUser =(String) request.getSession().getAttribute("loggedInUserId");
+		String loggedInUser =reminder.getReminderCreatedBy();
 		try {
 			reminder.setReminderCreatedBy(loggedInUser);
 			reminder.setReminderCreationDate(new Date());
 			if(reminderService.createReminder(reminder)!=null)
 			{
-				return new ResponseEntity<>(headers, HttpStatus.CREATED);
+				return new ResponseEntity<>(reminder,headers, HttpStatus.CREATED);
 			}
 		} catch (ReminderNotCreatedException e) {
 			e.printStackTrace();
@@ -110,13 +114,12 @@ public class ReminderController {
 	 * method" where "id" should be replaced by a valid reminderId without {}
 	 */
 	@ApiOperation(value = "Delete Reminder by Id")
-	@DeleteMapping("/api/v1/reminder/{id}")
-	public ResponseEntity<?> deleteReminder(@PathVariable("id") String id,HttpServletRequest request) 
+	@DeleteMapping("/api/v1/reminder/{userId}/{id}")
+	public ResponseEntity<?> deleteReminder(@PathVariable("userId") String userId,@PathVariable("id") String id,HttpServletRequest request) 
 	{
 	
 		log.info("deleteReminder : STARTED");
 		HttpHeaders headers = new HttpHeaders();
-		String loggedInUser =(String) request.getSession().getAttribute("loggedInUserId");
 		
 		try {
 			if(reminderService.deleteReminder(id))
@@ -142,8 +145,8 @@ public class ReminderController {
 	 * method.
 	 */
 	@ApiOperation(value = "Update Reminder by id")
-	@PutMapping("/api/v1/reminder/{id}")
-	public ResponseEntity<?> updateReminder(@RequestBody Reminder reminder,@PathVariable("id") String id,HttpServletRequest request) 
+	@PutMapping("/api/v1/reminder/{userId}/{id}")
+	public ResponseEntity<?> updateReminder(@RequestBody Reminder reminder,@PathVariable("userId") String userId,@PathVariable("id") String id,HttpServletRequest request) 
 	{
 		log.info("updateReminder : STARTED");
 		HttpHeaders headers = new HttpHeaders();
@@ -175,8 +178,8 @@ public class ReminderController {
 	 * where "id" should be replaced by a valid reminderId without {}
 	 */
 	@ApiOperation(value = "Get Reminder by id")
-	@GetMapping("/api/v1/reminder/{id}")
-	public ResponseEntity<?> getReminderById(@PathVariable("id") String id, HttpServletRequest request) {
+	@GetMapping("/api/v1/reminder/{userId}/{id}")
+	public ResponseEntity<?> getReminderById(@PathVariable("userId") String userId,@PathVariable("id") String id, HttpServletRequest request) {
 		log.info("getReminderById : STARTED");
 		HttpHeaders headers = new HttpHeaders();
 		try {
@@ -205,15 +208,15 @@ public class ReminderController {
 	 * This handler method should map to the URL "/api/v1/reminder" using HTTP GET method
 	 */
 	@ApiOperation(value = "Get Reminders")
-	@GetMapping("/api/v1/reminder")
-	public ResponseEntity<?> getAllReminders(HttpServletRequest request) {
+	@GetMapping("/api/v1/reminder/{userId}")
+	public ResponseEntity<?> getAllReminders(@PathVariable("userId") String userId,HttpServletRequest request) {
 		log.info("getAllReminders : STARTED");
 		HttpHeaders headers = new HttpHeaders();
 		try {
-				List<Reminder> reminders =reminderService.getAllReminders();
+				List<Reminder> reminders =reminderService.getRemindersByUser(userId);
 				if(reminders!=null)
 				{
-					return new ResponseEntity<List<Reminder>>(reminders, HttpStatus.OK);
+					return new ResponseEntity<List<Reminder>>(reminders,headers, HttpStatus.OK);
 				}
 				
 		} catch (Exception e) {
@@ -223,4 +226,5 @@ public class ReminderController {
 		log.info("getAllReminders : ENDED");
 		return new ResponseEntity<>(headers, HttpStatus.OK);
 	}
+
 }

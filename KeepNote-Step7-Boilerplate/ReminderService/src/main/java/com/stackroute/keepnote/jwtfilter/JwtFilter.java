@@ -34,7 +34,7 @@ public class JwtFilter extends GenericFilterBean {
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain)
 			throws IOException, ServletException {
 
-		final HttpServletRequest request = (HttpServletRequest) req;
+/*		final HttpServletRequest request = (HttpServletRequest) req;
 		final HttpServletResponse response = (HttpServletResponse) res;
 		final String authHeader = request.getHeader("authorization");
 
@@ -51,6 +51,8 @@ public class JwtFilter extends GenericFilterBean {
 
 			request.setAttribute("claims", claims);
 			filterChain.doFilter(req, res);
-		}
+		}*/
+		
+		filterChain.doFilter(req, res);
 	}
 }

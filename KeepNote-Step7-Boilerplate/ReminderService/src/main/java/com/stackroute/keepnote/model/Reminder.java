@@ -30,6 +30,13 @@ public class Reminder {
 	private String reminderType;
 	private String reminderCreatedBy;
 	private Date reminderCreationDate;
+	private Color color;
+	public Color getColor() {
+		return color;
+	}
+	public void setColor(Color color) {
+		this.color = color;
+	}
 	public String getReminderId() {
 		return reminderId;
 	}
