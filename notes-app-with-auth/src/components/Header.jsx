@@ -50,6 +50,7 @@ class Header extends Component {
       }
       localStorage.setItem('isLoggedIn', true);
       this.setState({ isLoggedIn: true });
+      this.props.handleReloadData();
     })
 
   }

@@ -41,10 +41,22 @@ class AppRouter extends Component {
         this.handleUpdateNote = this.handleUpdateNote.bind(this);
         this.handleSearchNote = this.handleSearchNote.bind(this);
         this.handleCurrentPage = this.handleCurrentPage.bind(this);
+        this.handleReloadData = this.handleReloadData.bind(this);
 
     }
 
     componentDidMount() {
+        let userid = localStorage.getItem('LoggedInUser');
+        // Get all the notes
+        fetch(`http://localhost:8082/noteservice/api/v1/note/${userid}`)
+            .then(response => response.json())
+            .then(success => this.setState({
+                notes: success,
+                originalNotes: success,
+            }))
+    }
+
+    handleReloadData() {
         let userid = localStorage.getItem('LoggedInUser');
         // Get all the notes
         fetch(`http://localhost:8082/noteservice/api/v1/note/${userid}`)
@@ -128,7 +140,8 @@ class AppRouter extends Component {
                 <MuiThemeProvider theme={theme}>
                     <Header handleSearchNote={this.handleSearchNote} 
                     handleCurrentPage={this.handleCurrentPage} 
-                    currentPage={this.state.currentPage}/>
+                    currentPage={this.state.currentPage}
+                    handleReloadData={this.handleReloadData} />
                     <Router history={history}>
                         <Switch>
                             <Route
