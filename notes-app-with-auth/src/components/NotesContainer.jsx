@@ -8,7 +8,7 @@ const NotesContainer = (props) => (
             props.notes.map(note =>  {
                 return (
                     <Grid key={note.id} item xs={12} sm={4} xl={3}>
-                        <Note note={note} handleRemoveNote={props.handleRemoveNote} />
+                        <Note note={note} reminders={props.reminders}  handleRemoveNote={props.handleRemoveNote} />
                     </Grid>
                 );
             })

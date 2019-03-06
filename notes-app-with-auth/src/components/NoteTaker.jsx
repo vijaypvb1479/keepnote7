@@ -11,7 +11,13 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import ColorPicker from 'react-color';
 import ColorLensIcon from '@material-ui/icons/ColorLens';
-
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import Checkbox from '@material-ui/core/Checkbox';
+import ListItemText from '@material-ui/core/ListItemText';
 const styles = theme => ({
     fab: {
         margin: theme.spacing.unit * 2,
@@ -39,8 +45,23 @@ const styles = theme => ({
         position: 'fixed',
         zIndex: '2',
     },
+    formControl: {
+        margin: theme.spacing.unit,
+        minWidth: 120,
+        maxWidth: 300,
+      },
 });
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 class NoteTaker extends Component {
     constructor(props) {
         super(props);
@@ -56,6 +77,9 @@ class NoteTaker extends Component {
             },
             background: 'black',
             displayColorPicker: false,
+            reminderId: '',
+            reminderName: '',
+            selectedReminder: [],
         };
         this.handleClickOpen = this.handleClickOpen.bind(this);
         this.handleAddNote = this.handleAddNote.bind(this);
@@ -83,6 +107,7 @@ class NoteTaker extends Component {
                 a: '1',
             },
             background: 'black',
+            selectedReminder: [],
         });
     }
 
@@ -95,12 +120,22 @@ class NoteTaker extends Component {
     }
 
     handleAddNote() {
+        let selReminders = [];
+        if(this.props.reminders.length > 0 && this.state.selectedReminder.length > 0){
+        this.state.selectedReminder.forEach(reminderName => {
+            let sRem = this.props.reminders.find(reminder => {
+                if (reminder.reminderName === reminderName) return reminder;
+            });
+            selReminders.push(sRem);
+        });
+    }
         const newNote = {
             id: Math.random() * 2342342,
             noteTitle: this.state.noteTitle,
             noteDescription: this.state.noteDescription,
             color: this.state.color,
             noteCreatedBy: localStorage.getItem('LoggedInUser'),
+            reminders: selReminders,
         }
         this.props.handleAddNote(newNote);
         this.handleClose();
@@ -118,6 +153,10 @@ class NoteTaker extends Component {
         this.setState({ color: color.rgb, background: color.hex })
     };
 
+    handleReminderChange = event => {
+        this.setState({ selectedReminder: event.target.value });
+      };
+
     render() {
         const { classes } = this.props;
         const cover = {
@@ -127,6 +166,7 @@ class NoteTaker extends Component {
             bottom: '0px',
             left: '0px',
         }
+        const {   reminders } = this.props; 
         return (
             <Fragment>
                 <Tooltip title="Add Note" aria-label="Add note">
@@ -176,6 +216,24 @@ class NoteTaker extends Component {
                             value={this.state.noteDescription}
                             fullWidth
                         />
+                        <FormControl className={classes.formControl}>
+                            <InputLabel htmlFor="select-multiple-checkbox">Reminders</InputLabel>
+                            <Select
+                                multiple
+                                value={this.state.selectedReminder}
+                                onChange={this.handleReminderChange}
+                                input={<Input id="select-multiple-checkbox" />}
+                                renderValue={selected => selected.join(', ')}
+                                MenuProps={MenuProps}
+                            >
+                                {reminders.map(reminder => (
+                                <MenuItem key={reminder.reminderId} value={reminder.reminderName}>
+                                    <Checkbox checked={this.state.selectedReminder.indexOf(reminder.reminderName) > -1} />
+                                    <ListItemText primary={reminder.reminderName} />
+                                </MenuItem>
+                                ))}
+                            </Select>
+                            </FormControl>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClose} color="primary">

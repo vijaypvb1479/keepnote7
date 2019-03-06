@@ -29,10 +29,10 @@ class NotesApp extends Component {
                             <Header />
                         </Grid> */}
                         <Grid item xs={12}>
-                            <NoteTaker handleAddNote={handleAddNote} />
+                            <NoteTaker reminders={reminders} handleAddNote={handleAddNote} />
                         </Grid>
                         <Grid item xs={12}>
-                            <NotesContainer notes={notes} handleRemoveNote={handleRemoveNote} />
+                            <NotesContainer notes={notes} reminders={reminders} handleRemoveNote={handleRemoveNote} />
                         </Grid>
                     </Grid>
                 </MuiThemeProvider>
